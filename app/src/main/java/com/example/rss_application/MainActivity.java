@@ -1,5 +1,6 @@
 package com.example.rss_application;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RssAdapter adapter;
+    private Handler handler = new Handler();
+    private Runnable updateRunnable;
+    private static final long UPDATE_INTERVAL = 60000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         String loadButtonText = ((GlobalData) getApplication()).getLoadButtonText();
         loadButton.setText(loadButtonText);
         loadButton.setOnClickListener(v -> loadRss());
+        startAutomaticUpdates();
     }
 
     private void loadRss() {
@@ -74,6 +80,25 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
         } else {
             adapter.updateData(items);
+        }
+    }
+
+    private void startAutomaticUpdates() {
+        updateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                loadRss();
+                handler.postDelayed(this, UPDATE_INTERVAL);
+            }
+        };
+        handler.post(updateRunnable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null && updateRunnable != null) {
+            handler.removeCallbacks(updateRunnable);
         }
     }
 }
