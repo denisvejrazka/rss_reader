@@ -59,28 +59,26 @@ public class RssDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<RssItem> getAllRssItems() {
+    public List<RssItem> getRecentRssItems() {
         List<RssItem> items = new ArrayList<>();
-        Cursor cursor = database.rawQuery("SELECT * FROM rss_items", null);
+
+        String query = "SELECT * FROM rss_items ORDER BY pubDate DESC LIMIT 5";
+        Cursor cursor = database.rawQuery(query, null);
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    int titleIndex = cursor.getColumnIndexOrThrow("title");
-                    int linkIndex = cursor.getColumnIndexOrThrow("link");
-                    int pubDateIndex = cursor.getColumnIndexOrThrow("pubDate");
-                    int descriptionIndex = cursor.getColumnIndexOrThrow("description");
-
-                    String title = cursor.getString(titleIndex);
-                    String link = cursor.getString(linkIndex);
-                    String pubDate = cursor.getString(pubDateIndex);
-                    String description = cursor.getString(descriptionIndex);
+                    String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+                    String link = cursor.getString(cursor.getColumnIndexOrThrow("link"));
+                    String pubDate = cursor.getString(cursor.getColumnIndexOrThrow("pubDate"));
+                    String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
                     items.add(new RssItem(title, link, pubDate, description));
                 } while (cursor.moveToNext());
             }
             cursor.close();
         }
+
         return items;
     }
 }

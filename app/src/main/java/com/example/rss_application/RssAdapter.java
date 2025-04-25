@@ -1,12 +1,9 @@
 package com.example.rss_application;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
@@ -29,7 +26,14 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
         RssItem item = rssItems.get(position);
         holder.titleTextView.setText(item.title);
         holder.pubDateTextView.setText(item.pubDate);
-        holder.descriptionTextView.setText(item.description);
+
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Context context = v.getContext();
+            android.content.Intent intent = new android.content.Intent(context, DetailActivity.class);
+            intent.putExtra("title", item.title);
+            intent.putExtra("description", item.description);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -46,13 +50,11 @@ public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
     public static class RssViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView pubDateTextView;
-        TextView descriptionTextView;
 
         public RssViewHolder(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.rss_title);
             pubDateTextView = itemView.findViewById(R.id.rss_pub_date);
-            descriptionTextView = itemView.findViewById(R.id.rss_description);
         }
     }
 }
