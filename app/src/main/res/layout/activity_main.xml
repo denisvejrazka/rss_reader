@@ -22,21 +22,49 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@android:color/white" />
 
+    <!-- Tlačítko pro zprávy -->
     <Button
-        android:id="@+id/load_button"
+        android:id="@+id/load_button_news"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:text="Načíst Zprávy"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/load_button_sport"
+        android:layout_marginEnd="8dp"/>
 
+    <!-- Tlačítko pro sport -->
+    <Button
+        android:id="@+id/load_button_sport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Načíst Sport"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toEndOf="@+id/load_button_news"
+        app:layout_constraintEnd_toStartOf="@+id/load_button_culture"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"/>
+
+    <!-- Tlačítko pro kulturu -->
+    <Button
+        android:id="@+id/load_button_culture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Načíst Kulturu"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toEndOf="@+id/load_button_sport"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="6dp"/>
+
+    <!-- RecyclerView pro zobrazení zpráv -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rss_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/load_button"
+        app:layout_constraintTop_toBottomOf="@+id/load_button_news"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,5 @@
 package com.example.rss_application;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
@@ -19,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private Runnable updateRunnable;
     private static final long UPDATE_INTERVAL = 60000;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,17 +32,25 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rss_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Button loadButton = findViewById(R.id.load_button);
-        String loadButtonText = ((GlobalData) getApplication()).getLoadButtonText();
-        loadButton.setText(loadButtonText);
-        loadButton.setOnClickListener(v -> loadRss());
+        Button loadNewsButton = findViewById(R.id.load_button_news);
+        Button loadSportsButton = findViewById(R.id.load_button_sport);
+        Button loadCultureButton = findViewById(R.id.load_button_culture);
+
+        loadNewsButton.setText(((GlobalData) getApplication()).getLoadNewsText());
+        loadSportsButton.setText(((GlobalData) getApplication()).getLoadSportText());
+        loadCultureButton.setText(((GlobalData) getApplication()).getLoadCultureText());
+
+        loadNewsButton.setOnClickListener(v -> loadRss("https://servis.idnes.cz/rss.aspx?c=zpravodaj"));
+        loadSportsButton.setOnClickListener(v -> loadRss("https://servis.idnes.cz/rss.aspx?c=sport"));
+        loadCultureButton.setOnClickListener(v -> loadRss("https://servis.idnes.cz/rss.aspx?c=kultura"));
+
         startAutomaticUpdates();
     }
 
-    private void loadRss() {
+    private void loadRss(String url) {
         if (isOnline()) {
             RssRepository repository = new RssRepository(this);
-            repository.loadRss("https://servis.idnes.cz/rss.aspx?c=zpravodaj", new RssRepository.Callback() {
+            repository.loadRss(url, new RssRepository.Callback() {
                 @Override
                 public void onSuccess(List<RssItem> items) {
                     showRssItems(items);
@@ -87,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         updateRunnable = new Runnable() {
             @Override
             public void run() {
-                loadRss();
+                loadRss("https://servis.idnes.cz/rss.aspx?c=zpravodaj");
                 handler.postDelayed(this, UPDATE_INTERVAL);
             }
         };

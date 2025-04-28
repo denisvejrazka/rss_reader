@@ -2,28 +2,30 @@ package com.example.rss_application;
 import android.app.Application;
 public class GlobalData extends Application {
     private String toolbarTitle;
-    private String loadButtonText;
+    public String loadNewsText;
+    private String loadSportText;
+    private String loadCultureText;
 
     @Override
     public void onCreate() {
         super.onCreate();
         toolbarTitle = "Čtečka RSS souborů";
-        loadButtonText = "Načíst";
+        loadNewsText = "Zprávy";
+        loadSportText = "Sport";
+        loadCultureText = "Kultura";
     }
 
     public String getToolbarTitle() {
         return toolbarTitle;
     }
 
-    public String getLoadButtonText() {
-        return loadButtonText;
+    public String getLoadSportText() {
+        return loadSportText;
     }
-
-    public void setToolbarTitle(String toolbarTitle) {
-        this.toolbarTitle = toolbarTitle;
+    public String getLoadCultureText() {
+        return loadCultureText;
     }
-
-    public void setLoadButtonText(String loadButtonText) {
-         this.loadButtonText = loadButtonText;
+    public String getLoadNewsText() {
+        return loadNewsText;
     }
 }
