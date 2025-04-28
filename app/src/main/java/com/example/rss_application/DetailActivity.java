@@ -17,7 +17,7 @@ public class DetailActivity extends AppCompatActivity {
         String toolbarTitle = ((GlobalData) getApplication()).getToolbarTitle();
         getSupportActionBar().setTitle(toolbarTitle);
 
-        // Enable the back button in the action bar
+        // back btn
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String title = getIntent().getStringExtra("title");

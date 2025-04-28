@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class RssAdapter extends RecyclerView.Adapter<RssAdapter.RssViewHolder> {
-
     private List<RssItem> rssItems;
 
     public RssAdapter(List<RssItem> rssItems) {

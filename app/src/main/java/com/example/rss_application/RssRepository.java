@@ -30,14 +30,12 @@ public class RssRepository {
         dbHelper = new RssDatabaseHelper(context);
     }
 
-    // Načítání RSS kanálu a jeho uložení do databáze
     public void loadRss(String urlString, Callback callback) {
         new Thread(() -> {
             try {
                 List<RssItem> items;
 
                 if (isNetworkAvailable()) {
-                    // Pokud je internetové připojení, načti data online
                     String response = loadRssFromUrl(urlString);
                     if (response == null || !response.trim().startsWith("<?xml")) {
                         throw new Exception("Response is not valid XML.");
@@ -46,8 +44,7 @@ public class RssRepository {
                     items = parseRssFeed(response);
                     saveRssItemsToDatabase(items);
                 } else {
-                    // Pokud není připojení k internetu, načti data z databáze
-                    items = dbHelper.getRecentRssItems(); // Načte poslední položky z databáze
+                    items = dbHelper.getRecentRssItems();
                     if (items.isEmpty()) {
                         throw new Exception("No internet connection and no offline data available.");
                     }
@@ -60,7 +57,7 @@ public class RssRepository {
         }).start();
     }
 
-    // Kontrola připojení k síti
+
     private boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         Network network = cm.getActiveNetwork();
@@ -78,7 +75,6 @@ public class RssRepository {
         conn.setRequestProperty("Referer", "https://www.idnes.cz");
         conn.connect();
 
-        // Handle redirects if needed
         if (conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP || conn.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
             conn = (HttpURLConnection) new URL(conn.getHeaderField("Location")).openConnection();
         }
@@ -93,12 +89,12 @@ public class RssRepository {
         String response = responseBuilder.toString();
         return response;
     }
-    // Parsování RSS feedu
+
     private List<RssItem> parseRssFeed(String rssFeed) throws Exception {
         return Parser.parse(new ByteArrayInputStream(rssFeed.getBytes(StandardCharsets.UTF_8)));
     }
 
-    // Uložení položek do databáze
+
     private void saveRssItemsToDatabase(List<RssItem> items) {
         dbHelper.open();
         for (RssItem item : items) {
@@ -107,12 +103,12 @@ public class RssRepository {
         dbHelper.close();
     }
 
-    // Odeslání úspěšného výsledku na hlavní vlákno
+
     private void postSuccess(Callback callback, List<RssItem> items) {
         new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(items));
     }
 
-    // Odeslání chyby na hlavní vlákno
+
     private void postError(Callback callback, Exception e) {
         new Handler(Looper.getMainLooper()).post(() -> callback.onError(e));
     }
